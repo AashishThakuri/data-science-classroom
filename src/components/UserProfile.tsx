@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -8,163 +6,133 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'react-hot-toast';
 import { Edit2, Save, X } from 'lucide-react';
 
-export const UserProfile = () => {
-  const { user } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('');
-  const [className, setClassName] = useState('');
-  const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+interface UserProfileData {
+  id: string;
+  full_name: string;
+  class_name: string;
+  username: string | undefined;
+  updated_at: string;
+}
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
+export function UserProfile() {
+  const { user } = useAuth();
+  const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState<UserProfileData | null>(null);
 
   const fetchProfile = async () => {
     try {
+      if (!user) return;
+
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, class_name, username, role, faculty')
-        .eq('id', user?.id)
+        .select('*')
+        .eq('id', user.id)
         .single();
 
       if (error) throw error;
-
-      if (data) {
-        setName(data.full_name || '');
-        setClassName(data.class_name || '');
-        setUsername(data.username || user?.email || '');
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      toast.error('Failed to load profile');
+      setProfile(data);
+    } catch (error: any) {
+      toast.error('Error fetching profile: ' + error.message);
     }
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
-      .toUpperCase();
   };
 
   const saveProfile = async () => {
-    if (!user) return;
-    
-    setIsLoading(true);
     try {
-      const updates = {
-        id: user.id,
-        full_name: name.trim(),
-        class_name: className.trim(),
-        username: username.trim() || user.email,
-        updated_at: new Date().toISOString(),
-      };
+      if (!user || !profile) return;
+      setLoading(true);
 
       const { error } = await supabase
         .from('profiles')
-        .upsert(updates, {
-          returning: 'minimal',
-          onConflict: 'id'
-        });
+        .upsert({
+          id: user.id,
+          full_name: profile.full_name,
+          class_name: profile.class_name,
+          username: profile.username,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
 
       if (error) throw error;
-
-      setIsEditing(false);
-      toast.success('Profile updated successfully');
-      await fetchProfile(); // Refresh the profile data
+      setEditing(false);
+      toast.success('Profile updated successfully!');
     } catch (error: any) {
-      console.error('Error updating profile:', error);
-      toast.error(error.message || 'Failed to update profile');
+      toast.error('Error updating profile: ' + error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchProfile();
+  }, [user]);
+
+  if (!user) return null;
+
   return (
-    <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg p-6 rounded-2xl shadow-lg">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-lg font-semibold text-purple-600 dark:text-purple-300">
-          {getInitials(name || username || 'U')}
-        </div>
-        
-        <div className="flex-1">
-          {isEditing ? (
-            <div className="space-y-2">
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                className="w-full"
-                disabled={isLoading}
-              />
-              <Input
-                value={className}
-                onChange={(e) => setClassName(e.target.value)}
-                placeholder="Your class"
-                className="w-full"
-                disabled={isLoading}
-              />
-              <Input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder={user?.email || 'Username'}
-                className="w-full"
-                disabled={isLoading}
-              />
-            </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Profile</h2>
+        {!editing ? (
+          <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
+            <Edit2 className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        ) : (
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" onClick={saveProfile} disabled={loading}>
+              <Save className="h-4 w-4 mr-2" />
+              Save
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label className="text-sm font-medium">Full Name</label>
+          {editing ? (
+            <Input
+              value={profile?.full_name || ''}
+              onChange={(e) => setProfile(prev => ({ ...prev!, full_name: e.target.value }))}
+              className="mt-1"
+            />
           ) : (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                {name || 'Add your name'}
-              </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {className || 'Add your class'}
-              </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                {username || user?.email}
-              </p>
-            </div>
+            <p className="mt-1">{profile?.full_name}</p>
           )}
         </div>
 
-        <div className="flex gap-2">
-          {isEditing ? (
-            <>
-              <Button
-                size="sm"
-                onClick={saveProfile}
-                className="bg-purple-500 hover:bg-purple-600 text-white"
-                disabled={isLoading}
-              >
-                <Save className="w-4 h-4 mr-1" />
-                {isLoading ? 'Saving...' : 'Save'}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setIsEditing(false)}
-                disabled={isLoading}
-              >
-                <X className="w-4 h-4 mr-1" />
-                Cancel
-              </Button>
-            </>
+        <div>
+          <label className="text-sm font-medium">Class</label>
+          {editing ? (
+            <Input
+              value={profile?.class_name || ''}
+              onChange={(e) => setProfile(prev => ({ ...prev!, class_name: e.target.value }))}
+              className="mt-1"
+            />
           ) : (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(true)}
-            >
-              <Edit2 className="w-4 h-4 mr-1" />
-              Edit
-            </Button>
+            <p className="mt-1">{profile?.class_name}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">Username</label>
+          {editing ? (
+            <Input
+              value={profile?.username || ''}
+              onChange={(e) => setProfile(prev => ({ ...prev!, username: e.target.value }))}
+              className="mt-1"
+            />
+          ) : (
+            <p className="mt-1">{profile?.username}</p>
           )}
         </div>
       </div>
     </div>
   );
-};
+}

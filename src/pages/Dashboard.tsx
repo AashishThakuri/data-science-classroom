@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactElement } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserStats } from '@/hooks/useUserStats';
 import { Clock, Target, Zap, Beaker, Calculator, BarChart3, GraduationCap } from 'lucide-react';
@@ -28,7 +28,7 @@ interface Resource {
   description: string;
   level: string;
   duration: string;
-  icon?: string;
+  icon?: ReactElement;
   link: string;
 }
 
@@ -50,7 +50,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Master data manipulation and analysis with Pandas",
         level: "Beginner",
         duration: "8 weeks",
-        icon: <Calculator />,
+        icon: <Calculator className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/python-data-analysis"
       },
       {
@@ -58,7 +58,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Learn core ML algorithms and implementations",
         level: "Intermediate",
         duration: "12 weeks",
-        icon: <BarChart3 />,
+        icon: <BarChart3 className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/machine-learning"
       }
     ],
@@ -77,7 +77,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Learn to analyze genomic data",
         level: "Beginner",
         duration: "10 weeks",
-        icon: <Beaker />,
+        icon: <Beaker className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/genomic-data-science"
       },
       {
@@ -85,7 +85,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Master computational biology algorithms",
         level: "Intermediate",
         duration: "12 weeks",
-        icon: <Calculator />,
+        icon: <Calculator className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/bioinformatics"
       }
     ],
@@ -104,7 +104,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Solve mathematical problems computationally",
         level: "Beginner",
         duration: "8 weeks",
-        icon: <Calculator />,
+        icon: <Calculator className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/numerical-methods"
       },
       {
@@ -112,7 +112,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Advanced optimization algorithms",
         level: "Advanced",
         duration: "12 weeks",
-        icon: <BarChart3 />,
+        icon: <BarChart3 className="h-5 w-5" />,
         link: "https://www.coursera.org/learn/optimization"
       }
     ],
