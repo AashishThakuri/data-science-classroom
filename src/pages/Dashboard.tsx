@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserStats } from '@/hooks/useUserStats';
-import { Clock, Target, Zap } from 'lucide-react';
+import { Clock, Target, Zap, Beaker, Calculator, BarChart3, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { UserProfile } from '@/components/UserProfile';
 import ToggleMode from '@/components/ToggleMode';
-import { GraduationCap, BeakerIcon, CalculatorIcon, BarChart } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -22,14 +21,14 @@ const itemVariants = {
   show: { opacity: 1, y: 0 }
 };
 
-type FacultyType = 'dataScience' | 'bioinformatics' | 'computationalMath';
+type FacultyType = 'data-science' | 'bioinformatics' | 'computational-math';
 
 interface Resource {
   title: string;
   description: string;
   level: string;
   duration: string;
-  icon: string;
+  icon?: string;
   link: string;
 }
 
@@ -44,14 +43,13 @@ interface FacultyResources {
 }
 
 const recommendations: { [key in FacultyType]: FacultyResources } = {
-  dataScience: {
+  'data-science': {
     courses: [
       {
         title: "Python for Data Analysis",
         description: "Master data manipulation and analysis with Pandas",
         level: "Beginner",
         duration: "8 weeks",
-        icon: "",
         link: "https://www.coursera.org/learn/python-data-analysis"
       },
       {
@@ -59,7 +57,7 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
         description: "Learn core ML algorithms and implementations",
         level: "Intermediate",
         duration: "12 weeks",
-        icon: ""
+        link: "https://www.coursera.org/learn/machine-learning"
       }
     ],
     skills: [
@@ -70,22 +68,21 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
       { name: "Data Visualization", level: "Core" }
     ]
   },
-  bioinformatics: {
+  'bioinformatics': {
     courses: [
       {
         title: "Genomic Data Science",
         description: "Learn to analyze genomic data",
         level: "Beginner",
         duration: "10 weeks",
-        icon: "",
-        link: ""
+        link: "https://www.coursera.org/learn/genomic-data-science"
       },
       {
         title: "Bioinformatics Algorithms",
         description: "Master computational biology algorithms",
         level: "Intermediate",
         duration: "12 weeks",
-        icon: ""
+        link: "https://www.coursera.org/learn/bioinformatics"
       }
     ],
     skills: [
@@ -96,22 +93,21 @@ const recommendations: { [key in FacultyType]: FacultyResources } = {
       { name: "Sequence Analysis", level: "Advanced" }
     ]
   },
-  computationalMath: {
+  'computational-math': {
     courses: [
       {
         title: "Numerical Methods",
         description: "Solve mathematical problems computationally",
         level: "Beginner",
         duration: "8 weeks",
-        icon: "",
-        link: ""
+        link: "https://www.coursera.org/learn/numerical-methods"
       },
       {
         title: "Optimization Techniques",
         description: "Advanced optimization algorithms",
         level: "Advanced",
         duration: "12 weeks",
-        icon: ""
+        link: "https://www.coursera.org/learn/optimization"
       }
     ],
     skills: [
@@ -128,7 +124,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { stats, loading: statsLoading } = useUserStats();
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
-  const userFaculty = (user?.user_metadata?.faculty as FacultyType) || 'dataScience';
+  const userFaculty = (user?.user_metadata?.faculty as FacultyType) || 'data-science';
 
   useEffect(() => {
     // Show celebration animation when score increases

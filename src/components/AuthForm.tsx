@@ -7,6 +7,8 @@ import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
+type FacultyType = 'data-science' | 'bioinformatics' | 'computational-math';
+
 interface AuthFormProps {
   mode: 'signup' | 'signin'
   onSuccess?: () => void
@@ -17,7 +19,7 @@ export function AuthForm({ mode, onSuccess, className }: AuthFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [faculty, setFaculty] = useState<'dataScience' | 'bioinformatics' | 'computationalMath'>('dataScience')
+  const [faculty, setFaculty] = useState<FacultyType>('data-science')
   const [loading, setLoading] = useState<boolean>(false)
   const [verificationSent, setVerificationSent] = useState(false)
   const auth = useAuth()
@@ -190,9 +192,9 @@ export function AuthForm({ mode, onSuccess, className }: AuthFormProps) {
                 <input
                   type="radio"
                   name="faculty"
-                  value="dataScience"
-                  checked={faculty === 'dataScience'}
-                  onChange={(e) => setFaculty(e.target.value as 'dataScience' | 'bioinformatics' | 'computationalMath')}
+                  value="data-science"
+                  checked={faculty === 'data-science'}
+                  onChange={(e) => setFaculty(e.target.value as FacultyType)}
                   className="h-4 w-4"
                 />
                 <span>Data Science</span>
@@ -203,7 +205,7 @@ export function AuthForm({ mode, onSuccess, className }: AuthFormProps) {
                   name="faculty"
                   value="bioinformatics"
                   checked={faculty === 'bioinformatics'}
-                  onChange={(e) => setFaculty(e.target.value as 'dataScience' | 'bioinformatics' | 'computationalMath')}
+                  onChange={(e) => setFaculty(e.target.value as FacultyType)}
                   className="h-4 w-4"
                 />
                 <span>Bioinformatics</span>
@@ -212,9 +214,9 @@ export function AuthForm({ mode, onSuccess, className }: AuthFormProps) {
                 <input
                   type="radio"
                   name="faculty"
-                  value="computationalMath"
-                  checked={faculty === 'computationalMath'}
-                  onChange={(e) => setFaculty(e.target.value as 'dataScience' | 'bioinformatics' | 'computationalMath')}
+                  value="computational-math"
+                  checked={faculty === 'computational-math'}
+                  onChange={(e) => setFaculty(e.target.value as FacultyType)}
                   className="h-4 w-4"
                 />
                 <span>Computational Mathematics</span>

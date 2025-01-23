@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CustomTabs as Tabs, CustomTabsContent as TabsContent, CustomTabsList as TabsList, CustomTabsTrigger as TabsTrigger } from '@/components/ui/custom-tabs';
 import { Input } from '@/components/ui/input';
-import { ExternalLink, Search, Book } from 'lucide-react';
+import { ExternalLink, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
