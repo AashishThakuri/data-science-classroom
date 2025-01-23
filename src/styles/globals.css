@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Import animations */
+@import './animations.css';
+
+/* Custom styles for classroom cards */
+.classroom-card {
+  @apply bg-white dark:bg-gray-800 rounded-lg overflow-hidden;
+  @apply transform transition-all duration-300;
+  @apply border border-gray-200 dark:border-gray-700;
+  @apply hover:shadow-xl hover:scale-105;
+}
+
+.classroom-header {
+  @apply bg-gradient-to-r from-purple-600 to-blue-500;
+  @apply text-white p-4;
+}
+
+.classroom-content {
+  @apply p-6 space-y-4;
+}
+
+.classroom-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  @apply bg-gradient-to-r from-green-400 to-blue-500;
+  @apply text-white animate-pulse;
+}
+
+.btn-gradient {
+  @apply bg-gradient-to-r from-purple-600 to-blue-500;
+  @apply hover:from-purple-700 hover:to-blue-600;
+  @apply transition-all duration-300;
+  @apply transform hover:scale-105;
+}
+
+/* Improve overall spacing */
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-spacing {
+  @apply py-12 space-y-8;
+}
+
+/* Dark mode improvements */
+.dark .classroom-card {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .classroom-header {
+  @apply bg-gradient-to-r from-purple-800 to-blue-700;
+}
+
+/* Responsive grid improvements */
+.grid-layout {
+  @apply grid gap-6;
+  @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+/* Animation classes */
+.hover-lift {
+  @apply transition-transform duration-300 ease-in-out;
+  @apply hover:-translate-y-1;
+}
+
+.fade-in {
+  @apply animate-fade-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-200 rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-purple-800;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-300;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-700;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-custom {
+  @apply bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50;
+}
+
+.dark .bg-gradient-custom {
+  @apply bg-gradient-to-br from-indigo-900/20 via-purple-900/20 to-pink-900/20;
+}
+
+/* Card and Container Styles */
+.glass-card {
+  @apply bg-white/95 backdrop-blur-lg;
+}
+
+.dark .glass-card {
+  @apply bg-gray-900/95;
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
