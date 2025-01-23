@@ -18,3 +18,21 @@ export interface FacultyResources {
 }
 
 export type FacultyType = 'data-science' | 'bioinformatics' | 'computational-math';
+
+export interface EducationalResource {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+  resource_type: 'course' | 'book' | 'video' | 'article';
+  class_level: string;
+  subject: string;
+  thumbnail_url: string | null;
+  author: string;
+  platform: string;
+  language: string;
+  is_free: boolean;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+}

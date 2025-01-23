@@ -66,9 +66,9 @@ export function useUserStats() {
         .upsert({ 
           user_id: user.id,
           score: newScore 
-        }, { 
-          onConflict: 'user_id'
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
       toast.success('Score updated successfully!');
@@ -132,9 +132,9 @@ export function useUserStats() {
         .upsert({ 
           user_id: user.id,
           usage: currentUsage + minutes 
-        }, { 
-          onConflict: 'user_id'
-        });
+        })
+        .select()
+        .single();
 
       if (updateError) throw updateError;
       toast.success('Usage time updated!');
