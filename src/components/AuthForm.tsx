@@ -5,13 +5,15 @@ import { Label } from '@/components/ui/label'
 import { useAuth } from '@/lib/auth'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { cn } from '@/lib/utils'
 
 interface AuthFormProps {
   mode: 'signup' | 'signin'
   onSuccess?: () => void
+  className?: string
 }
 
-export function AuthForm({ mode, onSuccess }: AuthFormProps) {
+export function AuthForm({ mode, onSuccess, className }: AuthFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -123,7 +125,7 @@ export function AuthForm({ mode, onSuccess }: AuthFormProps) {
   }
 
   return (
-    <div className="space-y-4 w-full max-w-sm">
+    <div className={cn('space-y-4 w-full max-w-sm', className)}>
       {verificationSent ? (
         <div className="text-center space-y-4">
           <h3 className="text-lg font-semibold">Verification Email Sent</h3>

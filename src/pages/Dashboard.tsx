@@ -24,90 +24,111 @@ const itemVariants = {
 
 type FacultyType = 'dataScience' | 'bioinformatics' | 'computationalMath';
 
+interface Resource {
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  icon: string;
+  link: string;
+}
+
+interface Skill {
+  name: string;
+  level: string;
+}
+
+interface FacultyResources {
+  courses: Resource[];
+  skills: Skill[];
+}
+
+const recommendations: { [key in FacultyType]: FacultyResources } = {
+  dataScience: {
+    courses: [
+      {
+        title: "Python for Data Analysis",
+        description: "Master data manipulation and analysis with Pandas",
+        level: "Beginner",
+        duration: "8 weeks",
+        icon: "",
+        link: "https://www.coursera.org/learn/python-data-analysis"
+      },
+      {
+        title: "Machine Learning Fundamentals",
+        description: "Learn core ML algorithms and implementations",
+        level: "Intermediate",
+        duration: "12 weeks",
+        icon: ""
+      }
+    ],
+    skills: [
+      { name: "Python", level: "Essential" },
+      { name: "Data Analysis", level: "Core" },
+      { name: "Machine Learning", level: "Advanced" },
+      { name: "SQL", level: "Essential" },
+      { name: "Data Visualization", level: "Core" }
+    ]
+  },
+  bioinformatics: {
+    courses: [
+      {
+        title: "Genomic Data Science",
+        description: "Learn to analyze genomic data",
+        level: "Beginner",
+        duration: "10 weeks",
+        icon: "",
+        link: ""
+      },
+      {
+        title: "Bioinformatics Algorithms",
+        description: "Master computational biology algorithms",
+        level: "Intermediate",
+        duration: "12 weeks",
+        icon: ""
+      }
+    ],
+    skills: [
+      { name: "R Programming", level: "Essential" },
+      { name: "Genomics", level: "Core" },
+      { name: "Biostatistics", level: "Core" },
+      { name: "Python", level: "Essential" },
+      { name: "Sequence Analysis", level: "Advanced" }
+    ]
+  },
+  computationalMath: {
+    courses: [
+      {
+        title: "Numerical Methods",
+        description: "Solve mathematical problems computationally",
+        level: "Beginner",
+        duration: "8 weeks",
+        icon: "",
+        link: ""
+      },
+      {
+        title: "Optimization Techniques",
+        description: "Advanced optimization algorithms",
+        level: "Advanced",
+        duration: "12 weeks",
+        icon: ""
+      }
+    ],
+    skills: [
+      { name: "MATLAB", level: "Essential" },
+      { name: "Linear Algebra", level: "Core" },
+      { name: "Calculus", level: "Core" },
+      { name: "Python Scientific Stack", level: "Essential" },
+      { name: "Algorithm Design", level: "Advanced" }
+    ]
+  }
+};
+
 export default function Dashboard() {
   const { user } = useAuth();
-  const { stats, loading } = useUserStats();
+  const { stats, loading: statsLoading } = useUserStats();
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const userFaculty = (user?.user_metadata?.faculty as FacultyType) || 'dataScience';
-
-  const recommendations = {
-    dataScience: {
-      courses: [
-        {
-          title: "Python for Data Analysis",
-          description: "Master data manipulation and analysis with Pandas",
-          level: "Beginner",
-          duration: "8 weeks",
-          icon: "📊",
-          link: "https://www.coursera.org/learn/python-data-analysis"
-        },
-        {
-          title: "Machine Learning Fundamentals",
-          description: "Learn core ML algorithms and implementations",
-          level: "Intermediate",
-          duration: "12 weeks",
-          icon: "🤖"
-        }
-      ],
-      skills: [
-        { name: "Python", level: "Essential" },
-        { name: "Data Analysis", level: "Core" },
-        { name: "Machine Learning", level: "Advanced" },
-        { name: "SQL", level: "Essential" },
-        { name: "Data Visualization", level: "Core" }
-      ]
-    },
-    bioinformatics: {
-      courses: [
-        {
-          title: "Genomic Data Science",
-          description: "Learn to analyze genomic data",
-          level: "Beginner",
-          duration: "10 weeks",
-          icon: "🧬"
-        },
-        {
-          title: "Bioinformatics Algorithms",
-          description: "Master computational biology algorithms",
-          level: "Intermediate",
-          duration: "12 weeks",
-          icon: "🔬"
-        }
-      ],
-      skills: [
-        { name: "R Programming", level: "Essential" },
-        { name: "Genomics", level: "Core" },
-        { name: "Biostatistics", level: "Core" },
-        { name: "Python", level: "Essential" },
-        { name: "Sequence Analysis", level: "Advanced" }
-      ]
-    },
-    computationalMath: {
-      courses: [
-        {
-          title: "Numerical Methods",
-          description: "Solve mathematical problems computationally",
-          level: "Beginner",
-          duration: "8 weeks",
-          icon: "🔢"
-        },
-        {
-          title: "Optimization Techniques",
-          description: "Advanced optimization algorithms",
-          level: "Advanced",
-          duration: "12 weeks",
-          icon: "📉"
-        }
-      ],
-      skills: [
-        { name: "MATLAB", level: "Essential" },
-        { name: "Linear Algebra", level: "Core" },
-        { name: "Calculus", level: "Core" },
-        { name: "Python Scientific Stack", level: "Essential" },
-        { name: "Algorithm Design", level: "Advanced" }
-      ]
-    }
-  };
 
   useEffect(() => {
     // Show celebration animation when score increases
@@ -129,7 +150,7 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [userFaculty]);
 
-  if (loading) {
+  if (statsLoading) {
     return (
       <div className="p-8 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto space-y-8">
