@@ -10,11 +10,16 @@ export default defineConfig({
     },
   },
   build: {
+    modulePreload: true,
+    target: 'esnext',
+    minify: 'esbuild',
     rollupOptions: {
       output: {
+        manualChunks: undefined,
         format: 'es',
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
       },
     },
   },
